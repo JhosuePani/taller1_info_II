@@ -152,13 +152,16 @@ class Sistema( Sustancia ):
         
 ################################ METODOS PARA VALIDAR ################################
 
+#  (JUAN) Josue voy a modificar estas funciones, ya que las planteó mal, si uno se equivoca más de dos veces
+# La función retorna None
+
 def validarFloat( a ):
     try:
         a = float( a )
         return a 
     except:
         opcion  = input( "ingrese un nuero valido: " )
-        validarFloat( opcion )
+        return validarFloat( opcion ) # Para solucionar eso basta con agrgar un return aquí
 
 def validarInt( a ):
     try:
@@ -166,18 +169,20 @@ def validarInt( a ):
         return a
     except:
         opcion = input( "Ingrese una opcion valida: " )
-        validarInt( opcion )
+        return validarInt( opcion )
 
-def validarBoolean( a ):
+def validarBoolean( a ): # (JUAN) Esta función es muy buena, me hubiera ahorrado muchas lineas xd
     if a == 'si':
         return True
     elif a == 'no':
         return False
     else:
         opcion = input( "Intentelo nuevamente: " )
-        validarBoolean( opcion )
+        return validarBoolean( opcion )
 
 ######################################################################################
+
+# (JUAN) Me gusta más como planteó el menu, más adelante va a ser más fácil de modificar el código
 
 def main():
     
@@ -308,6 +313,9 @@ def main():
             sustancia.sistemaBuscarSustancia( identificador )
             
         elif opcion == '3': # ELIMINAR SUSTANCIA
+            
+            # (JUAN)Eso de agregar esto al final es una mierda xd
+            
             identificador = input( """
             Ingrese el Id que desea eliminar, tenga en cuenta que cuando ingrese el numero, posteriormente ingrese las 
             iniciales dependiendo del tipo de sustancia.
