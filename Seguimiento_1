@@ -222,7 +222,7 @@ class Solventes(Sustancia):
     def cantidadSustancias(self):
         count = 0
         for key in list(self.sustanciaDict.keys()):
-            # Todos los ID de alcoholes se inician con SL
+            # Todos los ID de solventes se inician con SL
             if key.startswith('SL'):
                 count += 1
         return count
@@ -286,7 +286,7 @@ class Otros(Sustancia):
     def cantidadSustancias(self):
         count = 0
         for key in list(self.sustanciaDict.keys()):
-            # Todos los ID de alcoholes se inician con OT
+            # Todos los ID de "Otros" se inician con OT
             if key.startswith('OT'):
                 count += 1
         return count
@@ -294,7 +294,7 @@ class Otros(Sustancia):
     ########################## Métodos ASIGNACIÓN ##########################
 
     def asignarId(self):
-        # Se crea un nuevo elemento en el diccionario con la key 'AH'
+        # Se crea un nuevo elemento en el diccionario con la key 'OT'
         ID = 'OT' + str(self.cantidadSustancias())
         self.id = ID
         self.sustanciaDict[ID] = {}
@@ -332,11 +332,94 @@ class Otros(Sustancia):
         Cantidad ingresada: {self.cantidadIngresada}
         ''')
 
+class Sistema:
+    def __init__(self, Sustancia: dict = {}):
+        self.sustanciaDict = Sustancia
+    
+    def buscarSustancia(self):
+        id = input('\nIngrese ID de la sustancia para acceder a los detalles: ')
+        print(list(self.sustanciaDict.keys()))
+        if id in list(self.sustanciaDict.keys()):
+            print(f'''
+        La sustancia ha sido buscada es:
+        
+        ID : {id}
+        
+        Nombre: {self.sustanciaDict[id]['nombre']}
+        Ubicación:  Fila: {self.sustanciaDict[id]['ubicacion'][0]}, Columna: {self.sustanciaDict[id]['ubicacion'][1]}
+        Acceso al estudiante: {self.sustanciaDict[id]['accesoEstudiante']}
+        Nocividad: {self.sustanciaDict[id]['nocividad']}''')
 
+            try:
+                print(f'''
+        Concentración: {self.concentracion} M
+        Efecto para la salud: {self.efectoSalud}
+        ''')
+            except KeyError:
+               pass 
+
+            try:
+                print(f'''
+        Temperatura de ebullición: {self.tempEbullicion} °C
+        Temperatura al arder: {self.tempArder} °C
+        ''')
+            except KeyError:
+                pass
+
+            try:
+                print(f'''
+        Naturaleza: {self.naturaleza}
+        Viscosidad: {self.viscosidad} Pa*s
+        ''')
+            except KeyError:
+                pass
+
+            try:
+                print(f'''
+        Fecha de ingreso: {self.fechaIngreso}
+        Motivo de almacenaje: {self.motivoAlmacenaje}
+        Cantidad ingresada: {self.cantidadIngresada}
+        ''')
+            except KeyError:
+                pass
+        else:
+            print('Sustancia no encontrada')
+    
+    def verTodasSustancias(self):
+        for key in list(self.sustanciaDict.keys()):
+            nombre = self.sustanciaDict[key]['nombre']
+            print(f'ID: {key} -- {nombre}')
 
 def main():
-    SustanciaDict = sustancia = {'AH0': {'nombre': 'Etanol', 'ubicacion': [0, 0], 'accesoEstudiante': True, 'nocividad': True, 'tempEbullicion': 70.0, 'tempArder': 300.0}, 
-                                 'SL0': {'nombre': 'Eter', 'ubicacion': [1, 2], 'accesoEstudiante': False, 'nocividad': False, 'naturaleza': 'Polar', 'viscosidad': 3.0}}
+    SustanciaDict = sustancia = {'AH0': {'nombre': 'Etanol', 
+                                         'ubicacion': [0, 0], 
+                                         'accesoEstudiante': True, 
+                                         'nocividad': True, 
+                                         'tempEbullicion': 70.0, 
+                                         'tempArder': 300.0}, 
+
+                                 'SL0': {'nombre': 'Eter', 
+                                         'ubicacion': [1, 2], 
+                                         'accesoEstudiante': False, 
+                                         'nocividad': False, 
+                                         'naturaleza': 'Polar', 
+                                         'viscosidad': 3.0},
+
+                                 'AB0': {'nombre': 'HCl', 
+                                         'ubicacion': [2, 2], 
+                                         'accesoEstudiante': False, 
+                                         'nocividad': True, 
+                                         'concentracion': 7.0, 
+                                         'efectosAdversos': 'Quemaduras graves'}, 
+
+                                 'OT0': {'nombre': 'Canela en polvo', 
+                                         'ubicacion': [3, 3], 
+                                         'accesoEstudiante': True, 
+                                         'nocividad': False, 
+                                         'fechaIngreso': '23/02/2023', 
+                                         'motivoAlmacenaje': 'Uso en práctica de bioquímica', 
+                                         'cantidadIngresada': '70 gr'}}
+    
     print('\nSISTEMA DE INVENTARIO DE SUSTANCIAS QUÍMICAS')
     print('--------------------------------------------')
     while True:
@@ -394,9 +477,14 @@ def main():
                     print('Ha ingresado una opción incorrecta')
 
         elif op == '2':
-            pass
+            print('\nLas sustancias almacenadas en bodega son:')
+            sistema = Sistema(SustanciaDict)
+            sistema.verTodasSustancias()
+            sistema.buscarSustancia()
+        
         elif op == '3':
             pass
+        
         elif op == '4':
             print('\n El programa se ha cerrado...')
             print(SustanciaDict)
