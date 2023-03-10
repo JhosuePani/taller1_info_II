@@ -1,12 +1,15 @@
 class Sustancia:
     
     # MAQUETA DE CONSTRUCCIÓN DEL DICCIONARIO
-    # sustancia = {'AB0' : {'ubicacion': [1, 1], 'accesoEstudiante': False, 'nocividad': False}}
+    # sustancia = {'AB0' : 
+    #              {'nombre': 'HCl', 'ubicacion': [1, 1], 'accesoEstudiante': False, 'nocividad': False}}
     
     def __init__(self, Sustancia: dict = {}):
         # Identificador único : str
         # (si es ácido-base == AB, si es Alcohol == AH, si es Solvente == SL, si es otro == OT)
         self.id = ''
+        # Nombre: str
+        self.nombre = ''
         # Ubicación dentro del gabinete : list
         self.ubicacion = []
         # ¿Es de libre acceso para estudiantes? : boolean
@@ -28,11 +31,12 @@ class Sustancia:
             return self.ingresoNumerico(msg)
     
     def verificarUbicacion(self, fila, columna):
+        # Retorna True si la ubicación está ocupada
+        # y (False o None) si se encuentra vacía
         for key in list(self.sustanciaDict.keys()):
             try:
                 if [fila, columna] == self.sustanciaDict[key]['ubicacion']:
                     return True
-                break
             except KeyError:
                 return False
 
@@ -40,17 +44,22 @@ class Sustancia:
 
     def asignarSustanciaDict(self, Key_atributo, atributo):
         self.sustanciaDict[self.id][Key_atributo] = atributo
+    
+    def asignarNombre(self):
+        self.nombre = input('\nIngrese nombre de la sustancia: ')
+        self.asignarSustanciaDict('nombre', self.nombre)
 
     def asignarUbicacion(self):
         print('\nIngrese ubicación:')
-        fila = self.ingresoNumerico('Ingrese número de fila: ')
-        columna = self.ingresoNumerico('Ingrese número de columna: ')
-        if not self.verificarUbicacion(fila, columna):
-            self.ubicacion = [fila, columna]
-            self.asignarSustanciaDict('ubicacion', self.ubicacion)
-        else:
+        # la función "ingresoNumerico" retorna un float, por lo que la convertí en int
+        fila = int(self.ingresoNumerico('Ingrese número de fila: '))
+        columna = int(self.ingresoNumerico('Ingrese número de columna: '))
+        if self.verificarUbicacion(fila, columna):
             print('Ya existe una sustancia en esta ubicación')
             self.asignarUbicacion()
+        else:
+            self.ubicacion = [fila, columna]
+            self.asignarSustanciaDict('ubicacion', self.ubicacion)
 
     def asignarAccesoEstudiante(self):
         Acceso = self.ingresoNumerico('\n¿Es de libre acceso para estudiantes?\n (1) Sí \n (2) No\n>> ')
@@ -84,6 +93,7 @@ class Sustancia:
         
         ID : {self.id}
         
+        Nombre: {self.nombre}
         Ubicación:  Fila: {self.ubicacion[0]}, Columna: {self.ubicacion[1]}
         Acceso al estudiante: {self.accesoEstudiante}
         Nocividad: {self.nocividad}''')
@@ -126,6 +136,7 @@ class AcidoBase(Sustancia):
     
     def asignarAcidoBase(self):
         self.asignarId()
+        self.asignarNombre()
         self.asignarUbicacion()
         self.asignarAccesoEstudiante()
         self.asignarNocividad()
@@ -170,16 +181,17 @@ class Alcoholes(Sustancia):
         self.sustanciaDict[ID] = {}
     
     def asignarTempEbullicion(self):
-        tempEbullicion = self.ingresoNumerico('Ingrese temperatura de ebullición (°C): ')
+        tempEbullicion = self.ingresoNumerico('\nIngrese temperatura de ebullición (°C): ')
         self.tempEbullicion = tempEbullicion
         self.asignarSustanciaDict('tempEbullicion', self.tempEbullicion)
     
     def asignarTempArder(self):
-        self.tempArder = self.ingresoNumerico('Ingrese temperatura al arder (°C): ')
+        self.tempArder = self.ingresoNumerico('\nIngrese temperatura al arder (°C): ')
         self.asignarSustanciaDict('tempArder', self.tempArder)
     
     def asignarAlcohol(self):
         self.asignarId()
+        self.asignarNombre()
         self.asignarUbicacion()
         self.asignarAccesoEstudiante()
         self.asignarNocividad()
@@ -241,6 +253,7 @@ class Solventes(Sustancia):
     
     def asignarSolvente(self):
         self.asignarId()
+        self.asignarNombre()
         self.asignarUbicacion()
         self.asignarAccesoEstudiante()
         self.asignarNocividad()
@@ -266,7 +279,7 @@ class Otros(Sustancia):
         # Motivo de almacenaje : str
         self.motivoAlmacenaje = ''
         # Cantidad ingresada : str
-        self.CantidadIngresada = ''
+        self.cantidadIngresada = ''
 
     ########################## Métodos VALIDACIÓN ##########################
 
@@ -296,11 +309,12 @@ class Otros(Sustancia):
         self.asignarSustanciaDict('motivoAlmacenaje', self.motivoAlmacenaje)
     
     def asignarCantidadIngresada(self):
-        self.CantidadIngresada = input('Ingrese Cantidad (Por favor agregar unidades): ')
-        self.asignarSustanciaDict('CantidadIngresada', self.CantidadIngresada)
+        self.cantidadIngresada = input('\nIngrese Cantidad (Por favor agregar unidades): ')
+        self.asignarSustanciaDict('cantidadIngresada', self.cantidadIngresada)
     
     def asignarOtro(self):
         self.asignarId()
+        self.asignarNombre()
         self.asignarUbicacion()
         self.asignarAccesoEstudiante()
         self.asignarNocividad()
@@ -321,7 +335,8 @@ class Otros(Sustancia):
 
 
 def main():
-    SustanciaDict = sustancia = {'AB0' : {'ubicacion': [0, 0], 'accesoEstudiante': False, 'nocividad': False}}
+    SustanciaDict = sustancia = {'AH0': {'nombre': 'Etanol', 'ubicacion': [0, 0], 'accesoEstudiante': True, 'nocividad': True, 'tempEbullicion': 70.0, 'tempArder': 300.0}, 
+                                 'SL0': {'nombre': 'Eter', 'ubicacion': [1, 2], 'accesoEstudiante': False, 'nocividad': False, 'naturaleza': 'Polar', 'viscosidad': 3.0}}
     print('\nSISTEMA DE INVENTARIO DE SUSTANCIAS QUÍMICAS')
     print('--------------------------------------------')
     while True:
@@ -384,8 +399,8 @@ def main():
             pass
         elif op == '4':
             print('\n El programa se ha cerrado...')
-            break
             print(SustanciaDict)
+            break
         else:
             print('Ha ingresado una opción incorrecta')
 
