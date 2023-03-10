@@ -21,16 +21,16 @@ class Sustancia:
     
     def ingresoNumerico(self, msg:str = ''):
         try:
-            valor_numerico = int(input(msg))
+            valor_numerico = float(input(msg))
             return valor_numerico
         except ValueError:
             print("Por favor ingresar solo números.")
             return self.ingresoNumerico(msg)
     
-    def verificarUbicacion(self, fila, columna): ### Arreglar esta mondá #############################################
+    def verificarUbicacion(self, fila, columna):
         for key in list(self.sustanciaDict.keys()):
             try:
-                if [fila, columna] in self.sustanciaDict[key]['ubicacion']:
+                if [fila, columna] == self.sustanciaDict[key]['ubicacion']:
                     return True
                 break
             except KeyError:
@@ -93,8 +93,8 @@ class Sustancia:
 class AcidoBase(Sustancia):
     def __init__(self, Sustancia: dict = {}):
         super().__init__(Sustancia)
-        # Concentración en molar : int
-        self.concentracion = 0
+        # Concentración en molar : float
+        self.concentracion = 0.0
         # Descripción de efectos para la salud : str
         self.efectoSalud = ''
     
@@ -146,10 +146,10 @@ class AcidoBase(Sustancia):
 class Alcoholes(Sustancia):
     def __init__(self, Sustancia: dict = {}):
         super().__init__(Sustancia)
-        # Temperatura de ebullición : int
-        self.tempEbullicion = 0
-        # Temperatura alcanzada al arder : int
-        self.tempArder = 0
+        # Temperatura de ebullición : float
+        self.tempEbullicion = 0.0
+        # Temperatura alcanzada al arder : float
+        self.tempArder = 0.0
     
     ########################## Métodos VALIDACIÓN ##########################
 
@@ -236,7 +236,7 @@ class Solventes(Sustancia):
             return self.asignarNaturaleza()
     
     def asignarViscosidad(self):
-        self.viscosidad = self.ingresoNumerico('Ingrese viscosidad (Pa*s): ')
+        self.viscosidad = self.ingresoNumerico('\nIngrese viscosidad (Pa*s): ')
         self.asignarSustanciaDict('viscosidad', self.viscosidad)
     
     def asignarSolvente(self):
@@ -266,7 +266,7 @@ class Otros(Sustancia):
         # Motivo de almacenaje : str
         self.motivoAlmacenaje = ''
         # Cantidad ingresada : str
-        self.cantidadIgresada = ''
+        self.CantidadIngresada = ''
 
     ########################## Métodos VALIDACIÓN ##########################
 
@@ -287,17 +287,17 @@ class Otros(Sustancia):
         self.sustanciaDict[ID] = {}
     
     def asignarFechaIngreso(self):
-        fechaIngreso = self.ingresoNumerico('Ingrese fecha de ingreso (dd/mm/aaaa): ')
+        fechaIngreso = input('\nIngrese fecha de ingreso (dd/mm/aaaa): ')
         self.fechaIngreso = fechaIngreso
         self.asignarSustanciaDict('fechaIngreso', self.fechaIngreso)
     
     def asignarMotivoAlmacenaje(self):
-        self.motivoAlmacenaje = self.ingresoNumerico('Describa brevemente los motivo de almacenaje: \n> ')
+        self.motivoAlmacenaje = input('\nDescriba brevemente los motivo de almacenaje: \n> ')
         self.asignarSustanciaDict('motivoAlmacenaje', self.motivoAlmacenaje)
     
-    def asignarCantidadIgresada(self):
-        self.cantidadIgresada = self.ingresoNumerico('Ingrese Cantidad (Por favor agregar unidades): ')
-        self.asignarSustanciaDict('cantidadIgresada', self.cantidadIgresada)
+    def asignarCantidadIngresada(self):
+        self.CantidadIngresada = input('Ingrese Cantidad (Por favor agregar unidades): ')
+        self.asignarSustanciaDict('CantidadIngresada', self.CantidadIngresada)
     
     def asignarOtro(self):
         self.asignarId()
@@ -306,7 +306,7 @@ class Otros(Sustancia):
         self.asignarNocividad()
         self.asignarFechaIngreso()
         self.asignarMotivoAlmacenaje()
-        self.asignarCatidadIgresada()
+        self.asignarCantidadIngresada()
     
     ########################## Métodos VER AGREGADO ##########################
 
