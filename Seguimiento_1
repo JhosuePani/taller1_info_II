@@ -423,40 +423,31 @@ def main():
             (2) Alcohol
             (3) Solvente
             (4) Otro
-            (5) Regresar
         
         >> ''')
 
-            while True:
-                if op2 == '1':
-                    sustancia = AcidoBase(SustanciaDict)
-                    sustancia.asignarAcidoBase()
-                    sustancia.verSustancia()
-                    break
-                
-                elif op2 == '2':
-                    sustancia = Alcoholes(SustanciaDict)
-                    sustancia.asignarAlcohol()
-                    sustancia.verSustancia()
-                    break
+            if op2 == '1':
+                sustancia = AcidoBase(SustanciaDict)
+                sustancia.asignarAcidoBase()
+                sustancia.verSustancia()
+            
+            elif op2 == '2':
+                sustancia = Alcoholes(SustanciaDict)
+                sustancia.asignarAlcohol()
+                sustancia.verSustancia()
 
-                elif op2 == '3':
-                    sustancia = Solventes(SustanciaDict)
-                    sustancia.asignarSolvente()
-                    sustancia.verSustancia()
-                    break
+            elif op2 == '3':
+                sustancia = Solventes(SustanciaDict)
+                sustancia.asignarSolvente()
+                sustancia.verSustancia()
 
-                elif op2 == '4':
-                    sustancia = Otros(SustanciaDict)
-                    sustancia.asignarOtro()
-                    sustancia.verSustancia()
-                    break
-                
-                elif op2 == '5':
-                    break
+            elif op2 == '4':
+                sustancia = Otros(SustanciaDict)
+                sustancia.asignarOtro()
+                sustancia.verSustancia()
 
-                else:
-                    print('Ha ingresado una opción incorrecta')
+            else:
+                print('Ha ingresado una opción incorrecta')
 
         elif op == '2':
             print('\nLas sustancias almacenadas en bodega son:')
