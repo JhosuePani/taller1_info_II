@@ -96,7 +96,6 @@ class Sistema( Sustancia ):
     def __init__( self, diccionario ):
         super().__init__( diccionario )   
 
-    
     def sistemaVerificarSustancia( self, identificador ):
         if len( self.sustancias ) != 0:
             for id in self.sustancias.keys():
