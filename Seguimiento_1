@@ -116,7 +116,7 @@ class AcidoBase(Sustancia):
         self.sustanciaDict[ID] = {}
     
     def asignarConcentracion(self):
-        self.concentracion = self.ingresoNumerico('\nIngrese Concentración (Mol): ')
+        self.concentracion = self.ingresoNumerico('\nIngrese Concentración (Molar): ')
         self.asignarSustanciaDict('concentracion', self.concentracion)
     
     def asignarEfectoSalud(self):
