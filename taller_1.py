@@ -105,7 +105,6 @@ class Sistema( Sustancia ):
                 else:
                     return False
 
-    
     def sistemaVerSustancias( self ):
         return self.sustancias
     
@@ -163,7 +162,7 @@ def main():
             (4) Otros        
             > """ )
 
-            if opcion1 == '1':
+            if opcion1 == '1': # ACIDO BASE
                 identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "AB"
                 if sustancia.sistemaVerificarSustancia( identificador ) == True:
                     print( "El identificador ya esta ocupado con otra sustancia... " )
@@ -183,11 +182,29 @@ def main():
                 acidoBase.acidoBaseAsignarConcentracion( concentracion )
                 acidoBase.acidoBaseAsignarEfectos( efectos )
 
-            elif opcion1 == '2':
+            elif opcion1 == '2': # ALCOHOL
+                identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "A"
+                if sustancia.sistemaVerificarSustancia( identificador ) == True:
+                    print( "El identificador ya esta ocupado con otra sustancia... " )
+                    continue
+                alcohol = Alcohol( diccionario )
+                fila = validarInt( input( "Ingrese le numero de la fila: " ) )
+                columna = validarInt( input( "Ingrese la columna del gabinete: " ) )
+                peligrosa = validarBoolean( input( "La sustancia es peligrosa si/no: " ) )
+                acceso = validarBoolean( input( "La sustancia tiene acceso para estudiantes si/no: " ) )
+                tempEbullicion = validarFloat( input( "Ingrese la temperatura de ebullicion: " ) )
+                tempArder = validarFloat( input( "Ingrese la temperatura a la que arde: " ) )
+
+                alcohol.sustanciaAsignarIdentificador( identificador )
+                alcohol.sustanciaAsignarUbicacion( fila, columna )
+                alcohol.sustanciaAsignarPeligrosa( peligrosa )
+                alcohol.sustanciaAsignarAcceso( acceso )
+                alcohol.alcoholAsignarTempEbullicion( tempEbullicion )                
+                alcohol.alcoholAsignarTempArder( tempArder )
+
+            elif opcion1 == '3': # SOLVENTE
                 pass
-            elif opcion1 == '3':
-                pass
-            elif opcion1 == '4':
+            elif opcion1 == '4': # OTROS
                 pass
 
         elif opcion == '2': # BUSCAR SUSTANCIA
