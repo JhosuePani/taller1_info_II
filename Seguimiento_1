@@ -27,11 +27,12 @@ class Sustancia:
             print("Por favor ingresar solo números.")
             return self.ingresoNumerico(msg)
     
-    def verificarUbicacion(self, fila, columna): ### Arreglar esta mondá
+    def verificarUbicacion(self, fila, columna): ### Arreglar esta mondá #############################################
         for key in list(self.sustanciaDict.keys()):
             try:
                 if [fila, columna] in self.sustanciaDict[key]['ubicacion']:
                     return True
+                break
             except KeyError:
                 return False
 
@@ -320,11 +321,13 @@ class Otros(Sustancia):
 
 
 def main():
-    SustanciaDict = {}
+    SustanciaDict = sustancia = {'AB0' : {'ubicacion': [0, 0], 'accesoEstudiante': False, 'nocividad': False}}
     print('\nSISTEMA DE INVENTARIO DE SUSTANCIAS QUÍMICAS')
     print('--------------------------------------------')
     while True:
         op = input('''
+        Menu principal:
+
         (1) Ingresar sustancia
         (2) Buscar sustancia
         (3) Eliminar sustancia
