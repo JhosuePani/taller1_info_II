@@ -1,0 +1,390 @@
+class Sustancia:
+    
+    # MAQUETA DE CONSTRUCCIÓN DEL DICCIONARIO
+    # sustancia = {'AB0' : {'ubicacion': [1, 1], 'accesoEstudiante': False, 'nocividad': False}}
+    
+    def __init__(self, Sustancia: dict = {}):
+        # Identificador único : str
+        # (si es ácido-base == AB, si es Alcohol == AH, si es Solvente == SL, si es otro == OT)
+        self.id = ''
+        # Ubicación dentro del gabinete : list
+        self.ubicacion = []
+        # ¿Es de libre acceso para estudiantes? : boolean
+        self.accesoEstudiante = None
+        # ¿Es peligrosa para la salud humana? : boolean
+        self.nocividad = None
+
+        # Diccionario con la información básica de sustancia
+        self.sustanciaDict = Sustancia
+
+    ########################## Métodos VALIDACIÓN ##########################
+    
+    def ingresoNumerico(self, msg:str = ''):
+        try:
+            valor_numerico = int(input(msg))
+            return valor_numerico
+        except ValueError:
+            print("Por favor ingresar solo números.")
+            return self.ingresoNumerico(msg)
+    
+    def verificarUbicacion(self, fila, columna): ### Arreglar esta mondá
+        for key in list(self.sustanciaDict.keys()):
+            try:
+                if [fila, columna] in self.sustanciaDict[key]['ubicacion']:
+                    return True
+            except KeyError:
+                return False
+
+    ########################## Métodos ASIGNACIÓN ##########################
+
+    def asignarSustanciaDict(self, Key_atributo, atributo):
+        self.sustanciaDict[self.id][Key_atributo] = atributo
+
+    def asignarUbicacion(self):
+        print('\nIngrese ubicación:')
+        fila = self.ingresoNumerico('Ingrese número de fila: ')
+        columna = self.ingresoNumerico('Ingrese número de columna: ')
+        if not self.verificarUbicacion(fila, columna):
+            self.ubicacion = [fila, columna]
+            self.asignarSustanciaDict('ubicacion', self.ubicacion)
+        else:
+            print('Ya existe una sustancia en esta ubicación')
+            self.asignarUbicacion()
+
+    def asignarAccesoEstudiante(self):
+        Acceso = self.ingresoNumerico('\n¿Es de libre acceso para estudiantes?\n (1) Sí \n (2) No\n>> ')
+        if Acceso == 1:
+            self.accesoEstudiante = True
+            self.asignarSustanciaDict('accesoEstudiante', self.accesoEstudiante)
+        elif Acceso == 2:
+            self.accesoEstudiante = False
+            self.asignarSustanciaDict('accesoEstudiante', self.accesoEstudiante)
+        else:
+            print('Por favor ingresar una opción válida.')
+            return self.asignarAccesoEstudiante()
+    
+    def asignarNocividad(self):
+        Nocivo = self.ingresoNumerico('\n¿Es peligrosa para la salud humana?\n (1) Sí \n (2) No\n>> ')
+        if Nocivo == 1:
+            self.nocividad = True
+            self.asignarSustanciaDict('nocividad', self.nocividad)
+        elif Nocivo == 2:
+            self.nocividad = False
+            self.asignarSustanciaDict('nocividad', self.nocividad)
+        else:
+            print('Por favor ingresar una opción válida.')
+            return self.asignarNocividad()
+    
+    ########################## Métodos VER AGREGADO ##########################
+    
+    def verSustanciaGeneral(self):
+        print(f'''
+        La sustancia ha sido ingresada:
+        
+        ID : {self.id}
+        
+        Ubicación:  Fila: {self.ubicacion[0]}, Columna: {self.ubicacion[1]}
+        Acceso al estudiante: {self.accesoEstudiante}
+        Nocividad: {self.nocividad}''')
+
+
+
+class AcidoBase(Sustancia):
+    def __init__(self, Sustancia: dict = {}):
+        super().__init__(Sustancia)
+        # Concentración en molar : int
+        self.concentracion = 0
+        # Descripción de efectos para la salud : str
+        self.efectoSalud = ''
+    
+    ########################## Métodos VALIDACIÓN ##########################
+
+    def cantidadSustancias(self):
+        count = 0
+        for key in list(self.sustanciaDict.keys()):
+            # Todos los ID de ácidos-bases se inician con AB
+            if key.startswith('AB'):
+                count += 1
+        return count
+
+    ########################## Métodos ASIGNACIÓN ##########################
+
+    def asignarId(self):
+        # Se crea un nuevo elemento en el diccionario con la key 'AB'
+        ID = 'AB' + str(self.cantidadSustancias())
+        self.id = ID
+        self.sustanciaDict[ID] = {}
+    
+    def asignarConcentracion(self):
+        self.concentracion = self.ingresoNumerico('\nIngrese Concentración (Mol): ')
+        self.asignarSustanciaDict('concentracion', self.concentracion)
+    
+    def asignarEfectoSalud(self):
+        self.efectoSalud = input('Describa brevemente los efectos adversos a la salud: \n> ')
+        self.asignarSustanciaDict('efectosAdversos', self.efectoSalud)
+    
+    def asignarAcidoBase(self):
+        self.asignarId()
+        self.asignarUbicacion()
+        self.asignarAccesoEstudiante()
+        self.asignarNocividad()
+        self.asignarConcentracion()
+        self.asignarEfectoSalud()
+    
+    ########################## Métodos VER AGREGADO ##########################
+
+    def verSustancia(self):
+        self.verSustanciaGeneral()
+        print(f'''
+        Concentración: {self.concentracion} M
+        Efecto para la salud: {self.efectoSalud}
+        ''')
+
+
+
+class Alcoholes(Sustancia):
+    def __init__(self, Sustancia: dict = {}):
+        super().__init__(Sustancia)
+        # Temperatura de ebullición : int
+        self.tempEbullicion = 0
+        # Temperatura alcanzada al arder : int
+        self.tempArder = 0
+    
+    ########################## Métodos VALIDACIÓN ##########################
+
+    def cantidadSustancias(self):
+        count = 0
+        for key in list(self.sustanciaDict.keys()):
+            # Todos los ID de alcoholes se inician con AH
+            if key.startswith('AH'):
+                count += 1
+        return count
+
+    ########################## Métodos ASIGNACIÓN ##########################
+
+    def asignarId(self):
+        # Se crea un nuevo elemento en el diccionario con la key 'AH'
+        ID = 'AH' + str(self.cantidadSustancias())
+        self.id = ID
+        self.sustanciaDict[ID] = {}
+    
+    def asignarTempEbullicion(self):
+        tempEbullicion = self.ingresoNumerico('Ingrese temperatura de ebullición (°C): ')
+        self.tempEbullicion = tempEbullicion
+        self.asignarSustanciaDict('tempEbullicion', self.tempEbullicion)
+    
+    def asignarTempArder(self):
+        self.tempArder = self.ingresoNumerico('Ingrese temperatura al arder (°C): ')
+        self.asignarSustanciaDict('tempArder', self.tempArder)
+    
+    def asignarAlcohol(self):
+        self.asignarId()
+        self.asignarUbicacion()
+        self.asignarAccesoEstudiante()
+        self.asignarNocividad()
+        self.asignarTempEbullicion()
+        self.asignarTempArder()
+    
+    ########################## Métodos VER AGREGADO ##########################
+
+    def verSustancia(self):
+        self.verSustanciaGeneral()
+        print(f'''
+        Temperatura de ebullición: {self.tempEbullicion} °C
+        Temperatura al arder: {self.tempArder} °C
+        ''')
+
+
+
+class Solventes(Sustancia):
+    def __init__(self, Sustancia: dict = {}):
+        super().__init__(Sustancia)
+        # Naturaleza : str (si es polar o apolar)
+        self.naturaleza = ''
+        # Viscocidad (Pa*s) : int
+        self.viscosidad = 0
+    
+    ########################## Métodos VALIDACIÓN ##########################
+
+    def cantidadSustancias(self):
+        count = 0
+        for key in list(self.sustanciaDict.keys()):
+            # Todos los ID de alcoholes se inician con SL
+            if key.startswith('SL'):
+                count += 1
+        return count
+
+    ########################## Métodos ASIGNACIÓN ##########################
+
+    def asignarId(self):
+        # Se crea un nuevo elemento en el diccionario con la key 'AH'
+        ID = 'SL' + str(self.cantidadSustancias())
+        self.id = ID
+        self.sustanciaDict[ID] = {}
+    
+    def asignarNaturaleza(self):
+        naturaleza = self.ingresoNumerico('\n¿Cuál es la naturaleza del solvente?\n (1) Polar \n (2) Apolar\n>> ')
+        if naturaleza == 1:
+            self.naturaleza = 'Polar'
+            self.asignarSustanciaDict('naturaleza', self.naturaleza)
+        elif naturaleza == 2:
+            self.naturaleza = 'Apolar'
+            self.asignarSustanciaDict('naturaleza', self.naturaleza)
+        else:
+            print('Por favor ingresar una opción válida.')
+            return self.asignarNaturaleza()
+    
+    def asignarViscosidad(self):
+        self.viscosidad = self.ingresoNumerico('Ingrese viscosidad (Pa*s): ')
+        self.asignarSustanciaDict('viscosidad', self.viscosidad)
+    
+    def asignarSolvente(self):
+        self.asignarId()
+        self.asignarUbicacion()
+        self.asignarAccesoEstudiante()
+        self.asignarNocividad()
+        self.asignarNaturaleza()
+        self.asignarViscosidad()
+    
+    ########################## Métodos VER AGREGADO ##########################
+
+    def verSustancia(self):
+        self.verSustanciaGeneral()
+        print(f'''
+        Naturaleza: {self.naturaleza}
+        Viscosidad: {self.viscosidad} Pa*s
+        ''')
+
+
+
+class Otros(Sustancia):
+    def __init__(self, Sustancia: dict = {}):
+        super().__init__(Sustancia)
+        # Fecha de ingreso (dd/mm/aaaa) : str
+        self.fechaIngreso = ''
+        # Motivo de almacenaje : str
+        self.motivoAlmacenaje = ''
+        # Cantidad ingresada : str
+        self.cantidadIgresada = ''
+
+    ########################## Métodos VALIDACIÓN ##########################
+
+    def cantidadSustancias(self):
+        count = 0
+        for key in list(self.sustanciaDict.keys()):
+            # Todos los ID de alcoholes se inician con OT
+            if key.startswith('OT'):
+                count += 1
+        return count
+
+    ########################## Métodos ASIGNACIÓN ##########################
+
+    def asignarId(self):
+        # Se crea un nuevo elemento en el diccionario con la key 'AH'
+        ID = 'OT' + str(self.cantidadSustancias())
+        self.id = ID
+        self.sustanciaDict[ID] = {}
+    
+    def asignarFechaIngreso(self):
+        fechaIngreso = self.ingresoNumerico('Ingrese fecha de ingreso (dd/mm/aaaa): ')
+        self.fechaIngreso = fechaIngreso
+        self.asignarSustanciaDict('fechaIngreso', self.fechaIngreso)
+    
+    def asignarMotivoAlmacenaje(self):
+        self.motivoAlmacenaje = self.ingresoNumerico('Describa brevemente los motivo de almacenaje: \n> ')
+        self.asignarSustanciaDict('motivoAlmacenaje', self.motivoAlmacenaje)
+    
+    def asignarCantidadIgresada(self):
+        self.cantidadIgresada = self.ingresoNumerico('Ingrese Cantidad (Por favor agregar unidades): ')
+        self.asignarSustanciaDict('cantidadIgresada', self.cantidadIgresada)
+    
+    def asignarOtro(self):
+        self.asignarId()
+        self.asignarUbicacion()
+        self.asignarAccesoEstudiante()
+        self.asignarNocividad()
+        self.asignarFechaIngreso()
+        self.asignarMotivoAlmacenaje()
+        self.asignarCatidadIgresada()
+    
+    ########################## Métodos VER AGREGADO ##########################
+
+    def verSustancia(self):
+        self.verSustanciaGeneral()
+        print(f'''
+        Fecha de ingreso: {self.fechaIngreso}
+        Motivo de almacenaje: {self.motivoAlmacenaje}
+        Cantidad ingresada: {self.cantidadIngresada}
+        ''')
+
+
+
+def main():
+    SustanciaDict = {}
+    print('\nSISTEMA DE INVENTARIO DE SUSTANCIAS QUÍMICAS')
+    print('--------------------------------------------')
+    while True:
+        op = input('''
+        (1) Ingresar sustancia
+        (2) Buscar sustancia
+        (3) Eliminar sustancia
+        (4) Cerrar programa
+        
+        >> ''')
+
+        if op == '1':
+            op2 = input('''
+        Ingrese el tipo de sustancia
+            
+            (1) Ácido-Base
+            (2) Alcohol
+            (3) Solvente
+            (4) Otro
+            (5) Regresar
+        
+        >> ''')
+
+            while True:
+                if op2 == '1':
+                    sustancia = AcidoBase(SustanciaDict)
+                    sustancia.asignarAcidoBase()
+                    sustancia.verSustancia()
+                    break
+                
+                elif op2 == '2':
+                    sustancia = Alcoholes(SustanciaDict)
+                    sustancia.asignarAlcohol()
+                    sustancia.verSustancia()
+                    break
+
+                elif op2 == '3':
+                    sustancia = Solventes(SustanciaDict)
+                    sustancia.asignarSolvente()
+                    sustancia.verSustancia()
+                    break
+
+                elif op2 == '4':
+                    sustancia = Otros(SustanciaDict)
+                    sustancia.asignarOtro()
+                    sustancia.verSustancia()
+                    break
+                
+                elif op2 == '5':
+                    break
+
+                else:
+                    print('Ha ingresado una opción incorrecta')
+
+        elif op == '2':
+            pass
+        elif op == '3':
+            pass
+        elif op == '4':
+            print('\n El programa se ha cerrado...')
+            break
+            print(SustanciaDict)
+        else:
+            print('Ha ingresado una opción incorrecta')
+
+if __name__ == '__main__':
+    main()
