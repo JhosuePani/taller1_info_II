@@ -107,6 +107,12 @@ class Sistema( Sustancia ):
     def sistemaVerSustancias( self ):
         return self.sustancias
     
+    def sistemaBuscarSustancia( self, identificador ):
+        if identificador in list( self.sustancias.keys() ):
+            print( f"""
+            Id: {identificador}
+            
+            """ )
             
 ################################ METODOS PARA VALIDAR ################################
 
@@ -202,15 +208,60 @@ def main():
                 alcohol.alcoholAsignarTempArder( tempArder )
 
             elif opcion1 == '3': # SOLVENTE
-                pass
+                identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "SOL"
+                if sustancia.sistemaVerificarSustancia( identificador ) == True:
+                    print( "El identificador ya esta ocupado con otra sustancia... " )
+                    continue
+                solvente = Solvente( diccionario )
+                fila = validarInt( input( "Ingrese le numero de la fila: " ) )
+                columna = validarInt( input( "Ingrese la columna del gabinete: " ) )
+                peligrosa = validarBoolean( input( "La sustancia es peligrosa si/no: " ) )
+                acceso = validarBoolean( input( "La sustancia tiene acceso para estudiantes si/no: " ) )
+                naturaleza = input( "Polar o apolar: " )
+                viscosidad = validarFloat( input( "Ingrese la viscosidad: " ) )
+
+                solvente.sustanciaAsignarIdentificador( identificador )
+                solvente.sustanciaAsignarUbicacion( fila, columna )
+                solvente.sustanciaAsignarPeligrosa( peligrosa )
+                solvente.sustanciaAsignarAcceso( acceso )
+                solvente.solventeAsignarNaturaleza( naturaleza )
+                solvente.solventeAsignarViscosida( viscosidad )
+
             elif opcion1 == '4': # OTROS
-                pass
+                identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "OTR"
+                if sustancia.sistemaVerificarSustancia( identificador ) == True:
+                    print( "El identificador ya esta ocupado con otra sustancia... " )
+                    continue
+                otros = Otro( diccionario )
+                fila = validarInt( input( "Ingrese le numero de la fila: " ) )
+                columna = validarInt( input( "Ingrese la columna del gabinete: " ) )
+                peligrosa = validarBoolean( input( "La sustancia es peligrosa si/no: " ) )
+                acceso = validarBoolean( input( "La sustancia tiene acceso para estudiantes si/no: " ) )
+                fecha = input( "Ingrese la fecha de ingreso dd/mm/aaaa : " )
+                motivo = input( "Ingrese el motivo por el cual ingresa la sustancia: " )
+                cantidad = validarFloat( input( "Ingrese la cantidad: " ) )
+
+                otros.sustanciaAsignarIdentificador( identificador )
+                otros.sustanciaAsignarUbicacion( fila, columna )
+                otros.sustanciaAsignarPeligrosa( peligrosa )
+                otros.sustanciaAsignarAcceso( acceso )
+                otros.otrosAsignarFecha( fecha )
+                otros.otrosAsignarMotivo( motivo )
+                otros.otrosAsignarCantidad( cantidad )
 
         elif opcion == '2': # BUSCAR SUSTANCIA
-            pass
+            id = input( """
+            Ingrese el Id que desea buscar, tenga en cuenta, cuando ingrese el numero, posteriormente ingrese las 
+            iniciales dependiendo del tipo de sustancia.
+            Acido Base (AB)
+            Alcohol (A)
+            Solvente (SOL)
+            Otros (OTR)
+            > """ )
         elif opcion == '3': # ELIMINAR SUSTANCIA
             pass 
         elif opcion == '4': # CERRAR PROGRAMA
+            print( "Programa cerrado..." )
             break
 
 if __name__ == '__main__':
