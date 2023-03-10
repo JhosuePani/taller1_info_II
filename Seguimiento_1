@@ -337,12 +337,10 @@ class Sistema:
         self.sustanciaDict = Sustancia
     
     def buscarSustancia(self):
-        id = input('\nIngrese ID de la sustancia para acceder a los detalles: ')
-        print(list(self.sustanciaDict.keys()))
+        ID = input('\nIngrese ID de la sustancia para acceder a los detalles: ')
+        id = ID.upper()
         if id in list(self.sustanciaDict.keys()):
             print(f'''
-        La sustancia ha sido buscada es:
-        
         ID : {id}
         
         Nombre: {self.sustanciaDict[id]['nombre']}
@@ -352,33 +350,33 @@ class Sistema:
 
             try:
                 print(f'''
-        Concentración: {self.concentracion} M
-        Efecto para la salud: {self.efectoSalud}
+        Concentración: {self.sustanciaDict[id]['concentracion']} M
+        Efecto para la salud: {self.sustanciaDict[id]['efectoSalud']}
         ''')
             except KeyError:
                pass 
 
             try:
                 print(f'''
-        Temperatura de ebullición: {self.tempEbullicion} °C
-        Temperatura al arder: {self.tempArder} °C
+        Temperatura de ebullición: {self.sustanciaDict[id]['tempEbullicion']} °C
+        Temperatura al arder: {self.sustanciaDict[id]['tempArder']} °C
         ''')
             except KeyError:
                 pass
 
             try:
                 print(f'''
-        Naturaleza: {self.naturaleza}
-        Viscosidad: {self.viscosidad} Pa*s
+        Naturaleza: {self.sustanciaDict[id]['naturaleza']}
+        Viscosidad: {self.sustanciaDict[id]['viscosidad']} Pa*s
         ''')
             except KeyError:
                 pass
 
             try:
                 print(f'''
-        Fecha de ingreso: {self.fechaIngreso}
-        Motivo de almacenaje: {self.motivoAlmacenaje}
-        Cantidad ingresada: {self.cantidadIngresada}
+        Fecha de ingreso: {self.sustanciaDict[id]['fechaIngreso']}
+        Motivo de almacenaje: {self.sustanciaDict[id]['motivoAlmacenaje']}
+        Cantidad ingresada: {self.sustanciaDict[id]['cantidadIngresada']}
         ''')
             except KeyError:
                 pass
@@ -388,38 +386,22 @@ class Sistema:
     def verTodasSustancias(self):
         for key in list(self.sustanciaDict.keys()):
             nombre = self.sustanciaDict[key]['nombre']
-            print(f'ID: {key} -- {nombre}')
+            print(f'Id: {key} -- {nombre}')
+    
+    def eliminarSustancia(self):
+        ID = input('\nIngrese ID de la sustancia a eliminar (Dejar vacío = cancelar): ')
+        id = ID.upper()
+        if id in list(self.sustanciaDict.keys()):
+            self.sustanciaDict.pop(id)
+            print('La sustancia se ha elimina con éxito...')
+        else:
+            print('Sustancia no encontrada')
+
+
 
 def main():
-    SustanciaDict = sustancia = {'AH0': {'nombre': 'Etanol', 
-                                         'ubicacion': [0, 0], 
-                                         'accesoEstudiante': True, 
-                                         'nocividad': True, 
-                                         'tempEbullicion': 70.0, 
-                                         'tempArder': 300.0}, 
+    SustanciaDict = {}
 
-                                 'SL0': {'nombre': 'Eter', 
-                                         'ubicacion': [1, 2], 
-                                         'accesoEstudiante': False, 
-                                         'nocividad': False, 
-                                         'naturaleza': 'Polar', 
-                                         'viscosidad': 3.0},
-
-                                 'AB0': {'nombre': 'HCl', 
-                                         'ubicacion': [2, 2], 
-                                         'accesoEstudiante': False, 
-                                         'nocividad': True, 
-                                         'concentracion': 7.0, 
-                                         'efectosAdversos': 'Quemaduras graves'}, 
-
-                                 'OT0': {'nombre': 'Canela en polvo', 
-                                         'ubicacion': [3, 3], 
-                                         'accesoEstudiante': True, 
-                                         'nocividad': False, 
-                                         'fechaIngreso': '23/02/2023', 
-                                         'motivoAlmacenaje': 'Uso en práctica de bioquímica', 
-                                         'cantidadIngresada': '70 gr'}}
-    
     print('\nSISTEMA DE INVENTARIO DE SUSTANCIAS QUÍMICAS')
     print('--------------------------------------------')
     while True:
@@ -483,11 +465,13 @@ def main():
             sistema.buscarSustancia()
         
         elif op == '3':
-            pass
+            print('\nLas sustancias almacenadas en bodega son:')
+            sistema = Sistema(SustanciaDict)
+            sistema.verTodasSustancias()
+            sistema.eliminarSustancia()
         
         elif op == '4':
             print('\n El programa se ha cerrado...')
-            print(SustanciaDict)
             break
         else:
             print('Ha ingresado una opción incorrecta')
