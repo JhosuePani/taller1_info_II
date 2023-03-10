@@ -24,7 +24,7 @@ class Sustancia:
     
     def ingresoNumerico(self, msg:str = ''):
         try:
-            valor_numerico = float(input(msg))
+            valor_numerico = float(input(msg))  
             return valor_numerico
         except ValueError:
             print("Por favor ingresar solo números.")
