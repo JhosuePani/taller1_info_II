@@ -1,104 +1,113 @@
 class Sustancia:
 
-    def __init__( self ):
-        self.__sustancias = dict()
+    def __init__( self, diccionario ):
+        self.sustancias = diccionario
         self.__identificador = ""
         self.__ubicacion = []
         self.__acceso = True or False
         self.__peligrosa = True or False 
 
+    # METODO PARA OBTENER EL IDENTIFICADOR
+    def sustanciaVerIdentificador( self ):
+        return self.__identificador
+
     # METODOS PARA ASIGNAR
     def sustanciaAsignarIdentificador( self, identificador ):
         self.__identificador = identificador
-        self.__sustancias[ identificador ] = {}
+        self.sustancias[ identificador ] = {}
 
     def sustanciaAsignarUbicacion( self, fila, columna ):
-        self.__ubicacion = list( fila, columna )
-        self.__sustancias[ self.__identificador ][ "Ubicacion" ] = self.__ubicacion
+        self.__ubicacion = [ fila, columna ]
+        self.sustancias[ self.__identificador ][ "Ubicacion" ] = self.__ubicacion
 
     def sustanciaAsignarAcceso( self, acceso ): # Acceso a estudiantes
         self.__acceso = acceso
-        self.__sustancias[ self.__identificador ][ "Acceso" ] =  self.__acceso
+        self.sustancias[ self.__identificador ][ "Acceso" ] =  self.__acceso
 
     def sustanciaAsignarPeligrosa( self, peligrosa ):
         self.__peligrosa = peligrosa
-        self.__sustancias[ self.__identificador ][ "Peligrosa" ] = self.__peligrosa
+        self.sustancias[ self.__identificador ][ "Peligrosa" ] = self.__peligrosa
     
 
 class AcidoBase( Sustancia ):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, diccionario):
+        super().__init__( diccionario )
         self.__concentracion = 0.0     
         self.__efectos = ""
 
     def acidoBaseAsignarConcentracion( self, concentracion ):
         self.__concentracion = concentracion
-        self.__sustancias[ self.__identificador ][ "Concentracion" ] = self.__concentracion
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Concentracion" ] = self.__concentracion
  
     def acidoBaseAsignarEfectos( self, efectos ):
         self.__efectos = efectos     
-        self.__sustancias[ self.__identificador ][ "Efectos" ] = self.__efectos   
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Efectos" ] = self.__efectos   
 
 class Alcohol( Sustancia ):
-    def __init__( self ):
-        super().__init__()
+    def __init__( self, diccionario ):
+        super().__init__( diccionario )
         self.__temperaturaEbullicion = 0.0
         self.__temperaturaArder = 0.0
 
     def alcoholAsignarTempEbullicion( self, temperaturaEbu ):
         self.__temperaturaEbullicion = temperaturaEbu
-        self.__sustancias[ self.__identificador ][ "Temperatura de ebullicion" ] = self.__temperaturaEbullicion
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Temperatura de ebullicion" ] = self.__temperaturaEbullicion
 
     def alcoholAsignarTempArder( self, temperaturaArder ):
         self.__temperaturaArder = temperaturaArder
-        self.__sustancias[ self.__identificador ][ "Temperatura Arder" ] = self.__temperaturaArder
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Temperatura Arder" ] = self.__temperaturaArder
 
 class Solvente( Sustancia ):
-    def __init__( self ):
-        super().__init__()
+    def __init__( self, diccionario ):
+        super().__init__( diccionario )
         self.__naturaleza = ""
         self.__viscosidad = 0
 
     def solventeAsignarNaturaleza( self, naturaleza ):
         self.__naturaleza = naturaleza
-        self.__sustancias[ self.__identificador ][ "Naturaleza" ] = self.__naturaleza
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Naturaleza" ] = self.__naturaleza
 
     def solventeAsignarViscosida( self, viscosidad ):
         self.__viscosidad = viscosidad
-        self.__sustancias[ self.__identificador ][ "Viscosidad" ] = self.__viscosidad
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Viscosidad" ] = self.__viscosidad
 
 class Otro( Sustancia ):
-    def __init__( self ):
-        super().__init__()
+    def __init__( self, diccionario ):
+        super().__init__( diccionario )
         self.__fecha = ""
         self.__motivo = ""
         self.__cantidad = ""
 
     def otrosAsignarFecha( self, fecha ):
         self.__fecha = fecha
-        self.__sustancias[ self.__identificador ][ "Fecha Ingreso" ] = self.__fecha
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Fecha Ingreso" ] = self.__fecha
 
     def otrosAsignarMotivo( self, motivo ):
         self.__motivo = motivo
-        self.__sustancias[ self.__identificador ][ "Motivo" ] = self.__motivo
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Motivo" ] = self.__motivo
 
     def otrosAsignarCantidad( self, cantidad ):
         self.__cantidad = cantidad
-        self.__sustancias[ self.__identificador ][ "Cantidad" ] = self.__cantidad
+        self.sustancias[ Sustancia.sustanciaVerIdentificador(self) ][ "Cantidad" ] = self.__cantidad
 
 
 class Sistema( Sustancia ):
     
-    def __init__( self ):
-        super().__init__()   
+    def __init__( self, diccionario ):
+        super().__init__( diccionario )   
 
     
     def sistemaVerificarSustancia( self, identificador ):
-        for id in self.__sustancias.keys():
-            if id == identificador:
-                return True
-            else:
-                return False
+        if len( self.sustancias ) != 0:
+            for id in self.sustancias.keys():
+                if id == identificador:
+                    return True
+                else:
+                    return False
+
+    
+    def sistemaVerSustancias( self ):
+        return self.sustancias
     
             
 ################################ METODOS PARA VALIDAR ################################
@@ -111,13 +120,32 @@ def validarFloat( a ):
         opcion  = input( "ingrese un nuero valido: " )
         validarFloat( opcion )
 
+def validarInt( a ):
+    try:
+        a = int( a )
+        return a
+    except:
+        opcion = input( "Ingrese una opcion valida: " )
+        validarInt( opcion )
+
+def validarBoolean( a ):
+    if a == 'si':
+        return True
+    elif a == 'no':
+        return False
+    else:
+        opcion = input( "Intentelo nuevamente: " )
+        validarBoolean( opcion )
+
 ######################################################################################
 
 def main():
     
+    diccionario = {}
+
     while True:
         
-        sustancia = Sistema()
+        sustancia = Sistema( diccionario )
 
         opcion = input( """
         (1) Ingresar sustancia
@@ -135,27 +163,31 @@ def main():
             (4) Otros        
             > """ )
 
-            if opcion == '1':
+            if opcion1 == '1':
                 identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "AB"
-                verificar = sustancia.sistemaVerificarSustancia( identificador ) if True else False
-                if verificar == False:
+                if sustancia.sistemaVerificarSustancia( identificador ) == True:
+                    print( "El identificador ya esta ocupado con otra sustancia... " )
                     continue
-                acidoBase = AcidoBase()
-                fila = validarFloat( input( "Ingrese le numero de la fila: " ) )
-                columna = validarFloat( input( "Ingrese la columna del gabinete: " ) )
-                
+                acidoBase = AcidoBase( diccionario )
+                fila = validarInt( input( "Ingrese le numero de la fila: " ) )
+                columna = validarInt( input( "Ingrese la columna del gabinete: " ) )
+                peligrosa = validarBoolean( input( "La sustancia es peligrosa si/no: " ) )
+                acceso = validarBoolean( input( "La sustancia tiene acceso para estudiantes si/no: " ) )
+                concentracion = validarFloat( input( "Ingrese la concentracion: " ) )
+                efectos = input( "Ingrese los efectos nocivos que produce esta sustancia: " )
+
                 acidoBase.sustanciaAsignarIdentificador( identificador )
                 acidoBase.sustanciaAsignarUbicacion( fila, columna )
-                acidoBase.sustanciaAsignarPeligrosa()
-                acidoBase.sustanciaAsignarAcceso()
-                acidoBase.acidoBaseAsignarConcentracion()
-                acidoBase.acidoBaseAsignarEfectos()
+                acidoBase.sustanciaAsignarPeligrosa( peligrosa )
+                acidoBase.sustanciaAsignarAcceso( acceso )
+                acidoBase.acidoBaseAsignarConcentracion( concentracion )
+                acidoBase.acidoBaseAsignarEfectos( efectos )
 
-            elif opcion == '2':
+            elif opcion1 == '2':
                 pass
-            elif opcion == '3':
+            elif opcion1 == '3':
                 pass
-            elif opcion == '4':
+            elif opcion1 == '4':
                 pass
 
         elif opcion == '2': # BUSCAR SUSTANCIA
