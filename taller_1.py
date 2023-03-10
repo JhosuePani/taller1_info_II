@@ -97,13 +97,13 @@ class Sistema( Sustancia ):
         super().__init__( diccionario )   
 
     def sistemaVerificarSustancia( self, identificador ):
-        if len( self.sustancias ) != 0:
-            for id in self.sustancias.keys():
-                if id == identificador:
-                    return True
-                else:
-                    return False
-
+        
+        for id in self.sustancias.keys():
+            if id == identificador:
+                return True
+            else:
+                return False
+        
     def sistemaVerSustancias( self ):
         return self.sustancias
     
@@ -111,9 +111,45 @@ class Sistema( Sustancia ):
         if identificador in list( self.sustancias.keys() ):
             print( f"""
             Id: {identificador}
-            
-            """ )
-            
+            Ubicacion: Fila: { self.sustancias[identificador]['Ubicacion'][0] }
+                       Columna: { self.sustancias[identificador]['Ubicacion'][1] }
+            Acceso a estudiantes: { self.sustancias[identificador]['Acceso'] }
+            Grado de peligro: { self.sustancias[identificador]['Peligrosa'] }""" )
+            try:
+                print( f"""
+            Concentracion: { self.sustancias[identificador]['Concentracion'] }
+            Efectos: { self.sustancias[identificador]['Efectos'] }
+                """ )
+            except:
+                pass
+            try:
+                print( f"""
+            Temperatura de ebullicion:  { self.sustancias[identificador]['Temperatura de ebullicion'] }
+            Temperatura al arder: { self.sustancias[identificador]['Temperatura Arder'] }
+                """ )
+            except:
+                pass
+            try:
+                print( f"""
+            Naturaleza: { self.sustancias[identificador]['Naturaleza'] }
+            Viscosidad: { self.sustancias[identificador]['Viscosidad'] }
+                """ )
+            except:
+                pass
+            try:
+                print( f"""
+            Fecha Ingreso: { self.sustancias[identificador]['Fecha Ingreso'] }
+            Motivo: { self.sustancias[identificador]['Motivo'] }
+            Cantidad: { self.sustancias[identificador]['Cantidad'] }
+                """ )
+            except:
+                pass
+       
+    def sistemaEliminarSustancia( self, identificador ):
+        if identificador in list( self.sustancias.keys() ):
+            self.sustancias.pop( identificador )
+        
+        
 ################################ METODOS PARA VALIDAR ################################
 
 def validarFloat( a ):
@@ -152,15 +188,18 @@ def main():
         sustancia = Sistema( diccionario )
 
         opcion = input( """
+        MENU INVENTARIO LAB.QUIMICA
+
         (1) Ingresar sustancia
         (2) Buscar sustancia
         (3) Eliminar sustancia
         (4) Cerrar programa
-        """ )
+        > """ )
         
         if opcion == '1': # INGRESAR SUSTANCIA
 
             opcion1 = input( """
+            ¿Que tipo de sustancia desea ingresar?
             (1) Acido Base 
             (2) Alcohol
             (3) Solvente
@@ -168,7 +207,7 @@ def main():
             > """ )
 
             if opcion1 == '1': # ACIDO BASE
-                identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "AB"
+                identificador = input( "\nIngresa el identificador de la sustancia acido base: " ) + "AB"
                 if sustancia.sistemaVerificarSustancia( identificador ) == True:
                     print( "El identificador ya esta ocupado con otra sustancia... " )
                     continue
@@ -186,6 +225,7 @@ def main():
                 acidoBase.sustanciaAsignarAcceso( acceso )
                 acidoBase.acidoBaseAsignarConcentracion( concentracion )
                 acidoBase.acidoBaseAsignarEfectos( efectos )
+                print( "Sustancia agregada con exito..." )
 
             elif opcion1 == '2': # ALCOHOL
                 identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "A"
@@ -206,6 +246,7 @@ def main():
                 alcohol.sustanciaAsignarAcceso( acceso )
                 alcohol.alcoholAsignarTempEbullicion( tempEbullicion )                
                 alcohol.alcoholAsignarTempArder( tempArder )
+                print( "Sustancia agregada con exito..." )
 
             elif opcion1 == '3': # SOLVENTE
                 identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "SOL"
@@ -226,6 +267,7 @@ def main():
                 solvente.sustanciaAsignarAcceso( acceso )
                 solvente.solventeAsignarNaturaleza( naturaleza )
                 solvente.solventeAsignarViscosida( viscosidad )
+                print( "Sustancia agregada con exito..." )
 
             elif opcion1 == '4': # OTROS
                 identificador = input( "Ingresa el identificador de la sustancia acido base: " ) + "OTR"
@@ -248,18 +290,39 @@ def main():
                 otros.otrosAsignarFecha( fecha )
                 otros.otrosAsignarMotivo( motivo )
                 otros.otrosAsignarCantidad( cantidad )
+                print( "Sustancia agregada con exito..." )
 
         elif opcion == '2': # BUSCAR SUSTANCIA
-            id = input( """
-            Ingrese el Id que desea buscar, tenga en cuenta, cuando ingrese el numero, posteriormente ingrese las 
+            identificador = input( """
+            Ingrese el Id que desea buscar, tenga en cuenta que cuando ingrese el numero, posteriormente ingrese las 
             iniciales dependiendo del tipo de sustancia.
+
             Acido Base (AB)
             Alcohol (A)
             Solvente (SOL)
             Otros (OTR)
             > """ )
+            if sustancia.sistemaVerificarSustancia( identificador ) == False:
+                print( "\nLa sustancia no se encuentra..." )
+                continue
+            sustancia.sistemaBuscarSustancia( identificador )
+            
         elif opcion == '3': # ELIMINAR SUSTANCIA
-            pass 
+            identificador = input( """
+            Ingrese el Id que desea eliminar, tenga en cuenta que cuando ingrese el numero, posteriormente ingrese las 
+            iniciales dependiendo del tipo de sustancia.
+
+            Acido Base (AB)
+            Alcohol (A)
+            Solvente (SOL)
+            Otros (OTR)
+            > """ )
+            if sustancia.sistemaVerificarSustancia( identificador ) == False:
+                print( "\nLa sustancia no se encuentra..." )
+                continue
+            sustancia.sistemaEliminarSustancia( identificador )
+            print( "\nLa sustancia a sido eliminada con exito..." )
+             
         elif opcion == '4': # CERRAR PROGRAMA
             print( "Programa cerrado..." )
             break
